@@ -7,7 +7,7 @@ description: |
   
   - Add repository
   
-        helm repo add azure-advanced-backup https://dodevops.github.io/azure-advanced-backup/
+        helm repo add azure-advanced-backup https://dodevops.io/azure-advanced-backup/
   
   - Install chart
   
