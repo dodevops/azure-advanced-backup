@@ -1,0 +1,41 @@
+# Default values for azure-advanced-backup.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/dodevops/azure-advanced-backup
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+nameOverride: ""
+fullnameOverride: ""
+
+config:
+  auth:
+    # -- The id of the application to authenticate with
+    applicationId: ""
+    # -- The secret of the application
+    secret: ""
+    # -- Azure tenant id
+    tenantId: ""
+
+  # -- Whitespace separated list of database logins in the form
+  #    `BACKUP_NAME:USERNAME:PASSWORD:HOST:DATABASE_NAME`
+  postgres_databases: ""
+
+  backupStorage:
+    # -- Name of the storage account to sync the containers to
+    account: ""
+    # -- Name of the storage container to sync the container contents to
+    container: ""
+  # -- Whitespace separated list of storage containers  in the form
+  #    `BACKUP_NAME:STORAGE_ACCOUNT_NAME:CONTAINER_NAME`
+  containers: ""
+  # -- Whitespace separated list of managed disks in the form
+  #    `DISK_NAME:DISK_URI:RESOURCEGROUP_NAME`
+  managedDisks: ""
+  # -- Cronjob schedule
+  schedule: "0 0 * * +"

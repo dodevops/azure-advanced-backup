@@ -1,0 +1,34 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "azure-advanced-backup.fullname" . }}
+  labels:
+    {{- include "azure-advanced-backup.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.config.schedule }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: {{ .Chart.Name }}
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              env:
+                - name: PG_DATABASES
+                  value: {{ .Values.config.postgres_databases }}
+                - name: AZ_APPLICATION_ID
+                  value: {{ .Values.config.auth.applicationId }}
+                - name: AZCOPY_SPA_CLIENT_SECRET
+                  value: {{ .Values.config.auth.secret }}
+                - name: AZ_TENANT_ID
+                  value: {{ .Values.config.auth.tenantId }}
+                - name: BACKUP_STORAGE_ACCOUNT
+                  value: {{ .Values.config.backupStorage.account }}
+                - name: BACKUP_STORAGE_CONTAINER
+                  value: {{ .Values.config.backupStorage.container }}
+                - name: CONTAINERS
+                  value: {{ .Values.config.containers }}
+                - name: MANAGED_DISKS
+                  value: {{ .Values.config.managedDisks }}
+          restartPolicy: OnFailure
