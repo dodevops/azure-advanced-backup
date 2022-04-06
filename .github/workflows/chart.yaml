@@ -3,7 +3,7 @@ name: Create and publish the Helm chart
 on:
   push:
     paths:
-      - "helm-charts/*"
+      - "helm-charts/**/*"
 
 jobs:
   build-and-push-chart:
