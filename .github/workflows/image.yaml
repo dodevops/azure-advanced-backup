@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "container/*"
+      - ".github/**/*"
 
 env:
   REGISTRY: ghcr.io

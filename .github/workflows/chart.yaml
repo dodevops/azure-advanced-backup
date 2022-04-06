@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "helm-charts/**/*"
+      - - ".github/**/*"
 
 jobs:
   build-and-push-chart:
