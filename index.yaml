@@ -1,0 +1,20 @@
+apiVersion: v1
+entries:
+  azure-advanced-backup:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2022-04-06T12:30:42.808698339Z"
+    description: 'Azure backup of databases and containers in a Kubernetes Cronjob  **Usage**:  -
+      Add repository        helm repo add azure-advanced-backup https://dodevops.io/azure-advanced-backup/  -
+      Install chart        helm install azure-advanced-backup azure-advanced-backup/azure-advanced-backup
+      --version 0.1.0 '
+    digest: 421a1f958e5346aa7e6bab30fb12cb0cf9abc4d94105c3b038c5f03ccb9b19c5
+    home: https://github.com/dodevops/azure-advanced-backup
+    name: azure-advanced-backup
+    sources:
+    - https://github.com/dodevops/azure-advanced-backup
+    type: application
+    urls:
+    - https://github.com/dodevops/azure-advanced-backup/releases/download/azure-advanced-backup-0.1.0/azure-advanced-backup-0.1.0.tgz
+    version: 0.1.0
+generated: "2022-04-06T12:30:42.808705239Z"
