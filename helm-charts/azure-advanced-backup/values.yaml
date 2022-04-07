@@ -38,4 +38,4 @@ config:
   #    `DISK_NAME:DISK_URI:RESOURCEGROUP_NAME`
   managedDisks: ""
   # -- Cronjob schedule
-  schedule: "0 0 * * +"
+  schedule: "0 0 * * *"
