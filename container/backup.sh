@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if [ "${DEBUG}" == "yes" ]
+then
+  set -x
+fi
+
 # Login into AZ and AZCopy
 
 az login --service-principal --username "${AZ_APPLICATION_ID}" --password "${AZCOPY_SPA_CLIENT_SECRET}" --tenant "${AZ_TENANT_ID}"

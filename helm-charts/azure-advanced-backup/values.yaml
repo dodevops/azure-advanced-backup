@@ -39,3 +39,6 @@ config:
   managedDisks: ""
   # -- Cronjob schedule
   schedule: "0 0 * * *"
+  # -- Set to "yes" to enable debug output. **WARNING** This will potentially output sensitive information
+  #    to the log!
+  debug: "no"

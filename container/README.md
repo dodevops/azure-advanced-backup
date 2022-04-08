@@ -46,3 +46,6 @@ solution:
 - Azure Managed Disk backup
   - **MANAGED_DISKS**: Whitespace separated list of managed disks in the form
     `DISK_NAME:DISK_URI:RESOURCEGROUP_NAME`
+- General
+  - **DEBUG**: Set to "yes" to enable debug output. **WARNING** This will potentially output sensitive information
+    to the log!

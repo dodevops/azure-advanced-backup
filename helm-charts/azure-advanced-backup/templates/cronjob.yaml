@@ -31,4 +31,6 @@ spec:
                   value: {{ .Values.config.containers }}
                 - name: MANAGED_DISKS
                   value: {{ .Values.config.managedDisks }}
+                - name: "DEBUG"
+                  value: "{{.Values.config.debug}}"
           restartPolicy: OnFailure
