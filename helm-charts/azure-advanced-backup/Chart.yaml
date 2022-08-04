@@ -13,7 +13,7 @@ description: |
   
         helm install azure-advanced-backup azure-advanced-backup/azure-advanced-backup --version 0.1.0
 type: application
-version: 0.3.0
+version: 0.3.1
 appVersion: "0.3.0"
 home: "https://github.com/dodevops/azure-advanced-backup"
 sources:

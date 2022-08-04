@@ -36,7 +36,7 @@ spec:
                 - name: "RESOURCE_GROUP_LOCK_ID"
                   value: "{{ .Values.config.resourceGroupLockId }}"
                 - name: "COPY_SNAPSHOTS"
-                  value: "{{. Values.config.copySnapshots }}"
+                  value: "{{ .Values.config.copySnapshots }}"
                 - name: "SNAPSHOT_RETENTION_DAYS"
-                  value: "{{. Values.config.snapshotRetentionDays }}"
+                  value: "{{ .Values.config.snapshotRetentionDays }}"
           restartPolicy: OnFailure
