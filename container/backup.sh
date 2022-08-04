@@ -5,6 +5,34 @@ then
   set -x
 fi
 
+LOCK_INFO=""
+LOCK_NAME=""
+LOCK_RESOURCE_GROUP=""
+LOCK_NOTES=""
+LOCK_TYPE=""
+
+function delete_lock() {
+  if [[ "${RESOURCE_GROUP_LOCK_ID}" != "" ]]
+  then
+    if [[ "${LOCK_INFO}" == "" ]]
+    then
+      LOCK_INFO=$(az lock show --ids "${RESOURCE_GROUP_LOCK_ID}")
+    fi
+    LOCK_NAME=$(echo "$LOCK_INFO" | cut -f 3)
+    LOCK_RESOURCE_GROUP=$(echo "$LOCK_INFO" | cut -f 6)
+    LOCK_NOTES=$(echo "$LOCK_INFO" | cut -f 4)
+    LOCK_TYPE=$(echo "$LOCK_INFO" | cut -f 2)
+    az lock delete --ids "${RESOURCE_GROUP_LOCK_ID}"
+  fi
+}
+
+function create_lock() {
+  if [[ "${RESOURCE_GROUP_LOCK_ID}" != "" ]]
+  then
+    LOCK_INFO=$(az lock create --lock-type "$LOCK_TYPE" --name "${LOCK_NAME}" --resource-group "${LOCK_RESOURCE_GROUP}" --notes "${LOCK_NOTES}")
+  fi
+}
+
 # Login into AZ and AZCopy
 
 az login --service-principal --username "${AZ_APPLICATION_ID}" --password "${AZCOPY_SPA_CLIENT_SECRET}" --tenant "${AZ_TENANT_ID}"
@@ -61,10 +89,25 @@ then
     echo "Creating snapshot ${NAME}"
     az snapshot create --resource-group "${RESOURCEGROUP}" --name "${NAME}" --source "${DISKURI}"
     SAS=$(az snapshot grant-access --resource-group "${RESOURCEGROUP}" --name "${NAME}" --duration-in-seconds 360 --access-level Read --query "[accessSas]" -o tsv)
-    echo "Copying snapshot to backup storage"
-    azcopy copy --overwrite true "${SAS}" "https://${BACKUP_STORAGE_ACCOUNT}.blob.core.windows.net/${BACKUP_STORAGE_CONTAINER}/snapshots/${NAME}.vhd?${SAS_BACKUP}"
-    echo "Deleting snapshot"
-    az snapshot revoke-access --resource-group "${RESOURCEGROUP}" --name "${NAME}"
-    az snapshot delete --resource-group "${RESOURCEGROUP}" --name "${NAME}"
+    if [[ "${COPY_SNAPSHOTS}" == "true" ]]
+    then
+      echo "Copying snapshot to backup storage"
+      azcopy copy --overwrite true "${SAS}" "https://${BACKUP_STORAGE_ACCOUNT}.blob.core.windows.net/${BACKUP_STORAGE_CONTAINER}/snapshots/${NAME}.vhd?${SAS_BACKUP}"
+      echo "Deleting snapshot"
+      az snapshot revoke-access --resource-group "${RESOURCEGROUP}" --name "${NAME}"
+      delete_lock
+      az snapshot delete --resource-group "${RESOURCEGROUP}" --name "${NAME}"
+      create_lock
+    else
+      echo "Checking for snapshot retention"
+      SNAPSHOTS_TO_DELETE=$(az snapshot list --resource-group "${RESOURCEGROUP}" | jq --arg retention "${SNAPSHOT_RETENTION_DAYS}" '.[] | select(.timeCreated | sub("\\\..+$"; "") | sub("$"; "Z") | fromdate < now - ($retention | tonumber) * 24 * 60 * 60) | .id')
+      for SNAPSHOT_TO_DELETE in $SNAPSHOTS_TO_DELETE
+      do
+        echo "Deleting snapshot ${SNAPSHOT_TO_DELETE} because it is older than ${SNAPSHOT_RETENTION_DAYS} days"
+        delete_lock
+        az snapshot delete --ids "${SNAPSHOT_TO_DELETE}"
+        create_lock
+      done
+    fi
   done
 fi

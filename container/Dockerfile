@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/azure-cli:latest
 
-RUN apk add postgresql-client coreutils
+RUN apk add postgresql-client coreutils jq
 
 RUN cd /tmp && \
     curl -L https://aka.ms/downloadazcopy-v10-linux -o azcopy-linux.tar.gz && \

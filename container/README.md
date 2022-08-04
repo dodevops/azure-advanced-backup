@@ -46,6 +46,13 @@ solution:
 - Azure Managed Disk backup
   - **MANAGED_DISKS**: Whitespace separated list of managed disks in the form
     `DISK_NAME:DISK_URI:RESOURCEGROUP_NAME`
+  - **RESOURCE_GROUP_LOCK_ID**: Set to the id of a resource group lock to remove when deleting snapshots and recreate 
+    it afterwards
+  - **COPY_SNAPSHOTS**: If set to "true", copies the managed disk snapshots as a single VHD into the backup storage 
+    account. The existing VHD will be overwritten. If not set to "true", the snapshots will stay where they
+    were created and get deleted after the days given in snapshotRetentionDays.
+  - **SNAPSHOT_RETENTION_DAYS**: Number of days to keep a snapshot. Note that this only applies if copySnapshots is 
+    set to false.
 - General
   - **DEBUG**: Set to "yes" to enable debug output. **WARNING** This will potentially output sensitive information
     to the log!
