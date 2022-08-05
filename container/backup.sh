@@ -16,7 +16,7 @@ function delete_lock() {
   then
     if [[ "${LOCK_INFO}" == "" ]]
     then
-      LOCK_INFO=$(az lock show --ids "${RESOURCE_GROUP_LOCK_ID} -o tsv")
+      LOCK_INFO=$(az lock show --ids "${RESOURCE_GROUP_LOCK_ID}" -o tsv)
     fi
     LOCK_NAME=$(echo "$LOCK_INFO" | cut -f 3)
     LOCK_RESOURCE_GROUP=$(echo "$LOCK_INFO" | cut -f 6)
@@ -98,16 +98,16 @@ then
       delete_lock
       az snapshot delete --resource-group "${RESOURCEGROUP}" --name "${NAME}"
       create_lock
-    else
-      echo "Checking for snapshot retention"
-      SNAPSHOTS_TO_DELETE=$(az snapshot list --resource-group "${RESOURCEGROUP}" | jq --arg retention "${SNAPSHOT_RETENTION_DAYS}" '.[] | select(.timeCreated | sub("\\..+$"; "") | sub("$"; "Z") | fromdate < now - ($retention | tonumber) * 24 * 60 * 60) | .id')
-      for SNAPSHOT_TO_DELETE in $SNAPSHOTS_TO_DELETE
-      do
-        echo "Deleting snapshot ${SNAPSHOT_TO_DELETE} because it is older than ${SNAPSHOT_RETENTION_DAYS} days"
-        delete_lock
-        az snapshot delete --ids "${SNAPSHOT_TO_DELETE}"
-        create_lock
-      done
     fi
+  done
+
+  echo "Checking for snapshot retention"
+  SNAPSHOTS_TO_DELETE=$(az snapshot list --resource-group "${RESOURCEGROUP}" | jq --arg retention "${SNAPSHOT_RETENTION_DAYS}" '.[] | select(.timeCreated | sub("\\..+$"; "") | sub("$"; "Z") | fromdate < now - ($retention | tonumber) * 24 * 60 * 60) | .id')
+  for SNAPSHOT_TO_DELETE in $SNAPSHOTS_TO_DELETE
+  do
+    echo "Deleting snapshot ${SNAPSHOT_TO_DELETE} because it is older than ${SNAPSHOT_RETENTION_DAYS} days"
+    delete_lock
+    az snapshot delete --ids "${SNAPSHOT_TO_DELETE}"
+    create_lock
   done
 fi
