@@ -16,7 +16,7 @@ function delete_lock() {
   then
     if [[ "${LOCK_INFO}" == "" ]]
     then
-      LOCK_INFO=$(az lock show --ids "${RESOURCE_GROUP_LOCK_ID}")
+      LOCK_INFO=$(az lock show --ids "${RESOURCE_GROUP_LOCK_ID} -o tsv")
     fi
     LOCK_NAME=$(echo "$LOCK_INFO" | cut -f 3)
     LOCK_RESOURCE_GROUP=$(echo "$LOCK_INFO" | cut -f 6)
