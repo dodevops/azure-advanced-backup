@@ -88,9 +88,9 @@ then
     RESOURCEGROUP=$(echo "${DISK}" | cut -d ":" -f 3)
     echo "Creating snapshot ${NAME}"
     az snapshot create --resource-group "${RESOURCEGROUP}" --name "${NAME}" --source "${DISKURI}"
-    SAS=$(az snapshot grant-access --resource-group "${RESOURCEGROUP}" --name "${NAME}" --duration-in-seconds 360 --access-level Read --query "[accessSas]" -o tsv)
     if [[ "${COPY_SNAPSHOTS}" == "true" ]]
     then
+      SAS=$(az snapshot grant-access --resource-group "${RESOURCEGROUP}" --name "${NAME}" --duration-in-seconds 360 --access-level Read --query "[accessSas]" -o tsv)
       echo "Copying snapshot to backup storage"
       azcopy copy --overwrite true "${SAS}" "https://${BACKUP_STORAGE_ACCOUNT}.blob.core.windows.net/${BACKUP_STORAGE_CONTAINER}/snapshots/${NAME}.vhd?${SAS_BACKUP}"
       echo "Deleting snapshot"
@@ -102,11 +102,12 @@ then
   done
 
   echo "Checking for snapshot retention"
-  SNAPSHOTS_TO_DELETE=$(az snapshot list --resource-group "${RESOURCEGROUP}" | jq --arg retention "${SNAPSHOT_RETENTION_DAYS}" '.[] | select(.timeCreated | sub("\\..+$"; "") | sub("$"; "Z") | fromdate < now - ($retention | tonumber) * 24 * 60 * 60) | .id')
+  SNAPSHOTS_TO_DELETE=$(az snapshot list --resource-group "${RESOURCEGROUP}" | jq -r --arg retention "${SNAPSHOT_RETENTION_DAYS}" '.[] | select(.timeCreated | sub("\\..+$"; "") | sub("$"; "Z") | fromdate < now - ($retention | tonumber) * 24 * 60 * 60) | .id')
   for SNAPSHOT_TO_DELETE in $SNAPSHOTS_TO_DELETE
   do
     echo "Deleting snapshot ${SNAPSHOT_TO_DELETE} because it is older than ${SNAPSHOT_RETENTION_DAYS} days"
     delete_lock
+    az snapshot revoke-access --ids "${SNAPSHOT_TO_DELETE}"
     az snapshot delete --ids "${SNAPSHOT_TO_DELETE}"
     create_lock
   done
