@@ -83,7 +83,7 @@ then
   for DISK in ${MANAGED_DISKS}
   do
     DISKNAME=$(echo "${DISK}" | cut -d ":" -f 1)
-    NAME="${DISKNAME//disk/snap}-$(date +%F-%T)"
+    NAME="${DISKNAME//disk/snap}-$(date +%F-%H-%M-%S)"
     DISKURI=$(echo "${DISK}" | cut -d ":" -f 2)
     RESOURCEGROUP=$(echo "${DISK}" | cut -d ":" -f 3)
     echo "Creating snapshot ${NAME}"
