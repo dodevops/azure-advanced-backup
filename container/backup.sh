@@ -29,7 +29,7 @@ function delete_lock() {
 function create_lock() {
   if [[ "${RESOURCE_GROUP_LOCK_ID}" != "" ]]
   then
-    LOCK_INFO=$(az lock create --lock-type "$LOCK_TYPE" --name "${LOCK_NAME}" --resource-group "${LOCK_RESOURCE_GROUP}" --notes "${LOCK_NOTES}")
+    LOCK_INFO=$(az lock create --lock-type "$LOCK_TYPE" --name "${LOCK_NAME}" --resource-group "${LOCK_RESOURCE_GROUP}" --notes "${LOCK_NOTES}" -o tsv)
   fi
 }
 
