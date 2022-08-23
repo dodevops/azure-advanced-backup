@@ -40,6 +40,7 @@ solution:
 - Azure Database For PostgreSQL backup
   - **PG_DATABASES**: Whitespace separated list of database logins in the form
     `BACKUP_NAME:USERNAME:PASSWORD:HOST:DATABASE_NAME`
+  - **PG_USE_CUSTOM_FORMAT**: Set to "yes" to use the custom psql dump format instead of a raw SQL dump
 - Azure Storage Container synchronisation
   - **CONTAINERS**: Whitespace separated list of storage containers  in the form
     `BACKUP_NAME:STORAGE_ACCOUNT_NAME:CONTAINER_NAME`

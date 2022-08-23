@@ -46,6 +46,13 @@ SAS_BACKUP=$(az storage container generate-sas --account-name "${BACKUP_STORAGE_
 
 if [ -n "${PG_DATABASES}" ]
 then
+  PG_DUMP_FORMAT="p"
+  PG_DUMP_SUFFIX="sql"
+  if [ "${PG_USE_CUSTOM_FORMAT}" == "yes" ]
+  then
+    PG_DUMP_FORMAT="c"
+    PG_DUMP_SUFFIX="dmp"
+  fi
   for DATABASE in ${PG_DATABASES}
   do
     NAME=$(echo "${DATABASE}" | cut -d ":" -f 1)
@@ -56,8 +63,8 @@ then
     echo "Dumping ${NAME}"
     echo "${DATABASE_HOST}:5432:${DATABASE_NAME}:${DATABASE_USERNAME}@${DATABASE_HOST}:${DATABASE_PASSWORD}" > ~/.pgpass
     chmod 0600 ~/.pgpass
-    pg_dump --host="${DATABASE_HOST}" --dbname="${DATABASE_NAME}" --username="${DATABASE_USERNAME}@${DATABASE_HOST}" > dump.sql
-    azcopy copy --overwrite true dump.sql "https://${BACKUP_STORAGE_ACCOUNT}.blob.core.windows.net/${BACKUP_STORAGE_CONTAINER}/databases/${NAME}.$(date +%u).sql?${SAS_BACKUP}"
+    pg_dump --format "${PG_DUMP_FORMAT}"--host="${DATABASE_HOST}" --dbname="${DATABASE_NAME}" --username="${DATABASE_USERNAME}@${DATABASE_HOST}" > dump
+    azcopy copy --overwrite true dump "https://${BACKUP_STORAGE_ACCOUNT}.blob.core.windows.net/${BACKUP_STORAGE_CONTAINER}/databases/${NAME}.$(date +%u).${PG_DUMP_SUFFIX}?${SAS_BACKUP}"
   done
 fi
 
