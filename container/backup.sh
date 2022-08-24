@@ -63,7 +63,7 @@ then
     echo "Dumping ${NAME}"
     echo "${DATABASE_HOST}:5432:${DATABASE_NAME}:${DATABASE_USERNAME}@${DATABASE_HOST}:${DATABASE_PASSWORD}" > ~/.pgpass
     chmod 0600 ~/.pgpass
-    pg_dump --format "${PG_DUMP_FORMAT}"--host="${DATABASE_HOST}" --dbname="${DATABASE_NAME}" --username="${DATABASE_USERNAME}@${DATABASE_HOST}" > dump
+    pg_dump --format "${PG_DUMP_FORMAT}" --host="${DATABASE_HOST}" --dbname="${DATABASE_NAME}" --username="${DATABASE_USERNAME}@${DATABASE_HOST}" > dump
     azcopy copy --overwrite true dump "https://${BACKUP_STORAGE_ACCOUNT}.blob.core.windows.net/${BACKUP_STORAGE_CONTAINER}/databases/${NAME}.$(date +%u).${PG_DUMP_SUFFIX}?${SAS_BACKUP}"
   done
 fi
