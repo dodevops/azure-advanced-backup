@@ -1,6 +1,6 @@
 # azure-advanced-backup
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.3.0](https://img.shields.io/badge/AppVersion-0.3.0-informational?style=flat-square)
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.4.0](https://img.shields.io/badge/AppVersion-0.4.0-informational?style=flat-square)
 
 Azure backup of databases and containers in a Kubernetes Cronjob
 
@@ -33,7 +33,7 @@ Azure backup of databases and containers in a Kubernetes Cronjob
 | config.copySnapshots | string | `"true"` | If set to "true", copies the managed disk snapshots as a single VHD into the backup storage account. The    existing VHD will be overwritten. If not set to "true", the snapshots will stay where they    were created and get deleted after the days given in snapshotRetentionDays. |
 | config.debug | string | `"no"` | Set to "yes" to enable debug output. **WARNING** This will potentially output sensitive information    to the log! |
 | config.managedDisks | string | `""` | Whitespace separated list of managed disks in the form    `DISK_NAME:DISK_URI:RESOURCEGROUP_NAME` |
-| config.postgres_databases | string | `""` | Whitespace separated list of database logins in the form    `BACKUP_NAME:USERNAME:PASSWORD:HOST:DATABASE_NAME` |
+| config.postgres | object | `{"databases":"","useCustomFormat":"no"}` | Whitespace separated list of database logins in the form    `BACKUP_NAME:USERNAME:PASSWORD:HOST:DATABASE_NAME` |
 | config.resourceGroupLockId | string | `""` | Set to the id of a resource group lock to remove when deleting snapshots and recreate it afterwards |
 | config.schedule | string | `"0 0 * * *"` | Cronjob schedule |
 | config.snapshotRetentionDays | int | `7` | Number of days to keep a snapshot. Note that this only applies if copySnapshots is set to false. |

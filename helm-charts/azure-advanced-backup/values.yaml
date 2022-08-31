@@ -24,8 +24,10 @@ config:
 
   # -- Whitespace separated list of database logins in the form
   #    `BACKUP_NAME:USERNAME:PASSWORD:HOST:DATABASE_NAME`
-  postgres_databases: ""
-
+  postgres:
+    databases: ""
+    useCustomFormat: "no"
+  
   backupStorage:
     # -- Name of the storage account to sync the containers to
     account: ""
