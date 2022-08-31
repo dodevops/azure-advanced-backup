@@ -22,10 +22,12 @@ config:
     # -- Azure tenant id
     tenantId: ""
 
-  # -- Whitespace separated list of database logins in the form
-  #    `BACKUP_NAME:USERNAME:PASSWORD:HOST:DATABASE_NAME`
   postgres:
+    # -- Whitespace separated list of database logins in the form
+    #    `BACKUP_NAME:USERNAME:PASSWORD:HOST:DATABASE_NAME`
     databases: ""
+    # -- set to yes to use the pg_dump custom format (`--format c`) and a dmp suffix instead of the sql format and an
+    #    sql suffix
     useCustomFormat: "no"
   
   backupStorage:
