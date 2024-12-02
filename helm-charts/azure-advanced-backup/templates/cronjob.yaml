@@ -19,6 +19,8 @@ spec:
                   value: {{ .Values.config.postgres.databases }}
                 - name: PG_USE_CUSTOM_FORMAT
                   value: "{{ .Values.config.postgres.useCustomFormat }}"
+                - name: PG_ADD_OPTIONS
+                  value: "{{ .Values.config.postgres.additionalOptions }}"
                 - name: AZ_APPLICATION_ID
                   value: {{ .Values.config.auth.applicationId }}
                 - name: AZCOPY_SPA_CLIENT_SECRET
