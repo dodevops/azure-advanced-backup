@@ -29,7 +29,10 @@ config:
     # -- set to yes to use the pg_dump custom format (`--format c`) and a dmp suffix instead of the sql format and an
     #    sql suffix
     useCustomFormat: "no"
-  
+    #
+    # -- optional additional pg_dump parameters, e.g. to support --no-acl --no-ower in dump which may cause problems together with the azure flexible server
+    additionalOptions: ""
+
   backupStorage:
     # -- Name of the storage account to sync the containers to
     account: ""
