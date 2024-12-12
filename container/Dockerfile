@@ -1,6 +1,6 @@
-FROM mcr.microsoft.com/azure-cli:latest
+FROM mcr.microsoft.com/azure-cli:cbl-mariner2.0
 
-RUN apk add postgresql-client coreutils jq
+RUN yum install -y postgresql-libs coreutils jq tar
 
 RUN cd /tmp && \
     curl -L https://aka.ms/downloadazcopy-v10-linux -o azcopy-linux.tar.gz && \
