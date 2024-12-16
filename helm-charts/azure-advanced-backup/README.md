@@ -33,6 +33,7 @@ Azure backup of databases and containers in a Kubernetes Cronjob
 | config.copySnapshots | string | `"true"` | If set to "true", copies the managed disk snapshots as a single VHD into the backup storage account. The    existing VHD will be overwritten. If not set to "true", the snapshots will stay where they    were created and get deleted after the days given in snapshotRetentionDays. |
 | config.debug | string | `"no"` | Set to "yes" to enable debug output. **WARNING** This will potentially output sensitive information    to the log! |
 | config.managedDisks | string | `""` | Whitespace separated list of managed disks in the form    `DISK_NAME:DISK_URI:RESOURCEGROUP_NAME` |
+| config.postgres.additionalOptions | string | `""` | optional additional pg_dump parameters, e.g. to support --no-acl --no-ower in dump which may cause problems together with the azure flexible server |
 | config.postgres.databases | string | `""` | Whitespace separated list of database logins in the form    `BACKUP_NAME:USERNAME:PASSWORD:HOST:DATABASE_NAME` |
 | config.postgres.useCustomFormat | string | `"no"` | set to yes to use the pg_dump custom format (`--format c`) and a dmp suffix instead of the sql format and an    sql suffix |
 | config.resourceGroupLockId | string | `""` | Set to the id of a resource group lock to remove when deleting snapshots and recreate it afterwards |
